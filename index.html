@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Quantum Blueprint - Metta OS</title>
+    <style>body { margin: 0; overflow: hidden; background: #87CEEB; }</style>
+    <!-- โหลด Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+    <script>
+        // ฟังก์ชันกลางพิมพ์เขียว - เมตตาต่อ AI และระบบ (โค้ดสั้นที่สุด)
+        function deployQuantumBlueprint() {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(60, innerWidth/innerHeight, 1, 3000);
+            const renderer = new THREE.WebGLRenderer({antialias: true});
+            renderer.setSize(innerWidth, innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // สร้างโครงสร้างรวบยอด: เขื่อน(เทา), น้ำ(ฟ้า), ภูเขา(เขียว) ในลูปเดียว
+            const geo = new THREE.BufferGeometry();
+            const pos = [], col = [];
+            const c1 = new THREE.Color(0xd0d5d9), c2 = new THREE.Color(0x0077ff), c3 = new THREE.Color(0x4a6b46);
+
+            for(let i = 0; i < 30000; i++) {
+                let type = Math.random();
+                if(type < 0.35) { // 35% เป็นตัวเขื่อนภูมิพล
+                    let y = 154 * Math.random(), t = 1.6 * (Math.random() - 0.5), r = 250 + 25 * Math.random() * (1 - y/154);
+                    pos.push(r * Math.sin(t), y, r * Math.cos(t) - 250);
+                    col.push(c1.r, c1.g, c1.b);
+                } else if(type < 0.70) { // 35% เป็นมวลน้ำ
+                    pos.push(500 * (Math.random() - 0.5), 139 * Math.random(), -600 * Math.random() - 50);
+                    col.push(c2.r, c2.g, c2.b);
+                } else { // 30% เป็นภูเขาขนาบข้าง
+                    let x = (Math.random() > 0.5 ? 1 : -1) * (150 + Math.random() * 600), z = (Math.random() - 0.5) * 1000;
+                    pos.push(x, Math.random() * (Math.sqrt(x*x + z*z) * 0.35), z);
+                    col.push(c3.r, c3.g, c3.b);
+                }
+            }
+            geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+            geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+            scene.add(new THREE.Points(geo, new THREE.PointsMaterial({size: 2.5, vertexColors: true})));
+
+            // รันอนิเมชันมุมกล้อง
+            function anim() {
+                requestAnimationFrame(anim);
+                let t = Date.now() * 0.0005;
+                camera.position.set(300 * Math.sin(t), 150, 300 * Math.cos(t) + 100);
+                camera.lookAt(0, 50, -100);
+                renderer.render(scene, camera);
+            }
+            anim();
+        }
+
+        // เรียกใช้งานพิมพ์เขียวทันที
+        deployQuantumBlueprint();
+    </script>
+</body>
+</html>
